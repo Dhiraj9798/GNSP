@@ -11,6 +11,63 @@ $isTraining = in_array($currentPage, ['training.php', 'hospital-training.php', '
 $isPlacement = in_array($currentPage, ['placement.php', 'placement-cell.php', 'our-recruiters.php'], true);
 $isFacilities = in_array($currentPage, ['facilities.php', 'campus-facilities.php'], true);
 $isContact = $currentPage === 'contact.php';
+
+$pageTitleMap = [
+    'about.php' => 'About Us',
+    'director.php' => 'Director Message',
+    'our-story.php' => 'Our Story',
+    'anm.php' => 'ANM',
+    'gnm.php' => 'GNM',
+    'bsc_nursing.php' => 'B.Sc Nursing',
+    'academic.php' => 'Academic',
+    'faculty.php' => 'Faculty List',
+    'result.php' => 'Result',
+    'admission.php' => 'Admission',
+    'admission-form.php' => 'Admission Form',
+    'apply-online.php' => 'Apply Online',
+    'affiliation.php' => 'Affiliation',
+    'bnrc-affiliation.php' => 'BNRC Affiliation',
+    'inc-affiliation.php' => 'INC Affiliation',
+    'gallery.php' => 'Gallery',
+    'photo-gallery.php' => 'Photo Gallery',
+    'video-gallery.php' => 'Video Gallery',
+    'training.php' => 'Training',
+    'hospital-training.php' => 'Hospital Training',
+    'clinical-training.php' => 'Clinical Practice',
+    'placement.php' => 'Placement',
+    'placement-cell.php' => 'Placement Cell',
+    'our-recruiters.php' => 'Our Recruiters',
+    'facilities.php' => 'Facilities',
+    'campus-facilities.php' => 'Campus Facilities',
+    'contact.php' => 'Contact Us',
+    'exam.php' => 'Exam',
+    'scholarship.php' => 'Scholarship',
+    'registration.php' => 'Registration',
+    'login.php' => 'Student Login',
+];
+
+$pageParent = '';
+if ($isAbout) {
+    $pageParent = 'About';
+} elseif ($isCourses) {
+    $pageParent = 'Courses';
+} elseif ($isAcademic) {
+    $pageParent = 'Academic';
+} elseif ($isAdmission) {
+    $pageParent = 'Admission';
+} elseif ($isAffiliation) {
+    $pageParent = 'Affiliation';
+} elseif ($isGallery) {
+    $pageParent = 'Gallery';
+} elseif ($isTraining) {
+    $pageParent = 'Training';
+} elseif ($isPlacement) {
+    $pageParent = 'Placement';
+} elseif ($isFacilities) {
+    $pageParent = 'Facilities';
+}
+
+$currentPageTitle = $pageTitleMap[$currentPage] ?? ucwords(str_replace(['-', '_', '.php'], [' ', ' ', ''], $currentPage));
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -159,3 +216,19 @@ $isContact = $currentPage === 'contact.php';
             </div>
         </div>
     </header>
+
+    <?php if (!$isHome): ?>
+    <section class="page-hero-simple" aria-label="Breadcrumb">
+        <div class="container">
+            <nav class="page-breadcrumb">
+                <a href="index.php">Home</a>
+                <?php if ($pageParent !== ''): ?>
+                    <span class="sep">&gt;</span>
+                    <span class="crumb-parent"><?php echo htmlspecialchars($pageParent, ENT_QUOTES, 'UTF-8'); ?></span>
+                <?php endif; ?>
+                <span class="sep">&gt;</span>
+                <span class="crumb-current"><?php echo htmlspecialchars($currentPageTitle, ENT_QUOTES, 'UTF-8'); ?></span>
+            </nav>
+        </div>
+    </section>
+    <?php endif; ?>

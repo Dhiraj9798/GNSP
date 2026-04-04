@@ -184,7 +184,337 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
+        // Mobile browsers can pause timers on tab/app switches; this revives autoplay reliably.
+        window.addEventListener('pageshow', startAuto);
+        window.addEventListener('focus', startAuto);
+
         startAuto();
     }
+    // ──────────────────────────────────────────────────────────────
+
+    // ─── Notice Board Auto Loop ─────────────────────────────────
+    const noticeScrollers = document.querySelectorAll('[data-notice-loop]');
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (prefersReducedMotion) {
+        return;
+    }
+
+    noticeScrollers.forEach(scroller => {
+        if (scroller.dataset.loopInitialized === '1') return;
+        scroller.dataset.loopInitialized = '1';
+
+        const panel = scroller.closest('.notice-panel');
+        const lists = Array.from(scroller.querySelectorAll('.notice-list'));
+        if (!lists.length) return;
+
+        const speed = parseFloat(panel?.dataset.loopSpeed || '0.3');
+        const pixelsPerSecond = speed * 60;
+        let maxOffset = 0;
+        let offset = 0;
+        let paused = false;
+        let rafId = null;
+        let lastTimestamp = 0;
+
+        function getActiveTarget() {
+            const activeBtn = panel?.querySelector('.notice-filter-btn.active');
+            return activeBtn?.dataset.target;
+        }
+
+        function mountActiveList(targetName) {
+            const activeList = lists.find(list => list.dataset.list === targetName) ||
+                lists.find(list => !list.classList.contains('is-hidden')) ||
+                lists[0];
+
+            // Remove prior loop duplicates before re-mounting.
+            scroller.querySelectorAll('.notice-list-duplicate').forEach(node => node.remove());
+
+            lists.forEach(list => list.classList.add('is-hidden'));
+            activeList.classList.remove('is-hidden');
+
+            offset = 0;
+            scroller.scrollTop = 0;
+            maxOffset = activeList.scrollHeight;
+
+            if (activeList.children.length > 1) {
+                const duplicate = activeList.cloneNode(true);
+                duplicate.classList.add('notice-list-duplicate');
+                duplicate.setAttribute('aria-hidden', 'true');
+                scroller.appendChild(duplicate);
+            }
+
+            // Re-measure after browser paint; avoids zero-height edge cases on slow devices.
+            requestAnimationFrame(() => {
+                maxOffset = activeList.scrollHeight;
+            });
+        }
+
+        const filterButtons = panel ? Array.from(panel.querySelectorAll('.notice-filter-btn')) : [];
+        if (filterButtons.length) {
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    mountActiveList(button.dataset.target);
+                });
+            });
+        }
+
+        const initialTarget = filterButtons.find(btn => btn.classList.contains('active'))?.dataset.target;
+        mountActiveList(initialTarget);
+
+        function tick(timestamp) {
+            if (!lastTimestamp) lastTimestamp = timestamp;
+            const delta = timestamp - lastTimestamp;
+            lastTimestamp = timestamp;
+
+            if (!paused && maxOffset > 0) {
+                offset += (pixelsPerSecond * delta) / 1000;
+                if (offset >= maxOffset) offset = 0;
+                scroller.scrollTop = offset;
+            }
+            rafId = requestAnimationFrame(tick);
+        }
+
+        function ensureLoopRunning() {
+            if (rafId !== null) return;
+            lastTimestamp = 0;
+            rafId = requestAnimationFrame(tick);
+        }
+
+        scroller.addEventListener('mouseenter', () => { paused = true; });
+        scroller.addEventListener('mouseleave', () => { paused = false; });
+        // Keep touch devices auto-looping; hover pause is for desktop pointers only.
+
+        document.addEventListener('visibilitychange', () => {
+            paused = document.hidden;
+            if (!document.hidden) {
+                lastTimestamp = 0;
+                mountActiveList(getActiveTarget());
+            }
+        });
+
+        window.addEventListener('resize', () => {
+            mountActiveList(getActiveTarget());
+        });
+
+        window.addEventListener('orientationchange', () => {
+            mountActiveList(getActiveTarget());
+        });
+
+        window.addEventListener('pageshow', () => {
+            paused = false;
+            mountActiveList(getActiveTarget());
+            ensureLoopRunning();
+        });
+
+        ensureLoopRunning();
+    });
+    // ──────────────────────────────────────────────────────────────
+
+    // ─── Quick Links Scroll Reveal ───────────────────────────────
+    const quickLinkCards = document.querySelectorAll('.quick-link-card');
+    if (quickLinkCards.length) {
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add('in-view');
+                observer.unobserve(entry.target);
+            });
+        }, {
+            threshold: 0.12,
+            rootMargin: '0px 0px -30px 0px'
+        });
+
+        quickLinkCards.forEach(card => revealObserver.observe(card));
+    }
+
+        // ─── College Facilities Scroll Reveal ─────────────────────────
+        const facilityCards = document.querySelectorAll('.facility-card');
+        if (facilityCards.length) {
+            const facilityObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) return;
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                });
+            }, {
+                threshold: 0.15,
+                rootMargin: '0px 0px -24px 0px'
+            });
+
+            facilityCards.forEach(card => facilityObserver.observe(card));
+        }
+
+        // ─── Why Choose Lines Scroll Reveal ──────────────────────────
+        const whyPoints = document.querySelectorAll('.why-point');
+        if (whyPoints.length) {
+            const whyObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) return;
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                });
+            }, {
+                threshold: 0.2,
+                rootMargin: '0px 0px -28px 0px'
+            });
+
+            whyPoints.forEach(point => whyObserver.observe(point));
+        }
+
+    // ─── Stats Counter Number Animation ──────────────────────────
+    const counterSection = document.querySelector('.stats-counter-section');
+    const counterValues = document.querySelectorAll('.counter-value[data-target]');
+    if (counterSection && counterValues.length) {
+        let hasAnimatedCounters = false;
+
+        const runCounters = () => {
+            if (hasAnimatedCounters) return;
+            hasAnimatedCounters = true;
+
+            counterValues.forEach((node, index) => {
+                const target = parseInt(node.dataset.target || '0', 10);
+                const suffix = node.dataset.suffix || '';
+                const counterState = { value: 0 };
+
+                gsap.to(counterState, {
+                    value: target,
+                    duration: 1.7,
+                    delay: index * 0.1,
+                    ease: 'power2.out',
+                    onUpdate: () => {
+                        node.textContent = `${Math.floor(counterState.value)}${suffix}`;
+                    },
+                    onComplete: () => {
+                        node.textContent = `${target}${suffix}`;
+                    }
+                });
+            });
+        };
+
+        const counterObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                runCounters();
+                observer.unobserve(entry.target);
+            });
+        }, {
+            threshold: 0.3,
+            rootMargin: '0px 0px -40px 0px'
+        });
+
+        counterObserver.observe(counterSection);
+    }
+
+    // ─── Reviews One-By-One Slider ───────────────────────────────
+    const reviewSliders = document.querySelectorAll('[data-reviews-slider]');
+    reviewSliders.forEach((slider) => {
+        const viewport = slider.querySelector('.reviews-viewport');
+        const track = slider.querySelector('.reviews-track');
+        const cards = track ? Array.from(track.children) : [];
+        const prevBtn = slider.querySelector('.reviews-nav-prev');
+        const nextBtn = slider.querySelector('.reviews-nav-next');
+        if (!viewport || !track || cards.length < 2) return;
+
+        let index = 0;
+        let step = 0;
+        let maxIndex = 0;
+        let timerId = null;
+        const autoplayMs = parseInt(slider.dataset.autoplay || '3000', 10);
+
+        function updateButtons() {
+            if (!prevBtn || !nextBtn) return;
+            prevBtn.disabled = maxIndex === 0;
+            nextBtn.disabled = maxIndex === 0;
+        }
+
+        function applyPosition(animate = true) {
+            track.style.transition = animate ? 'transform 0.55s cubic-bezier(0.22, 0.61, 0.36, 1)' : 'none';
+            track.style.transform = `translate3d(${-index * step}px, 0, 0)`;
+        }
+
+        function computeBounds() {
+            const firstCard = cards[0];
+            const gap = parseFloat(getComputedStyle(track).gap || '0');
+            step = firstCard.getBoundingClientRect().width + gap;
+            const visibleCards = step > 0 ? Math.max(1, Math.floor((viewport.clientWidth + gap) / step)) : 1;
+            maxIndex = Math.max(0, cards.length - visibleCards);
+            if (index > maxIndex) index = maxIndex;
+            applyPosition(false);
+            updateButtons();
+        }
+
+        function goTo(nextIndex, animate = true) {
+            if (maxIndex <= 0) {
+                index = 0;
+                applyPosition(animate);
+                return;
+            }
+
+            if (nextIndex > maxIndex) {
+                index = 0;
+            } else if (nextIndex < 0) {
+                index = maxIndex;
+            } else {
+                index = nextIndex;
+            }
+
+            applyPosition(animate);
+        }
+
+        function stopAuto() {
+            if (timerId) {
+                clearInterval(timerId);
+                timerId = null;
+            }
+        }
+
+        function startAuto() {
+            stopAuto();
+            if (autoplayMs < 1000 || maxIndex <= 0) return;
+            timerId = setInterval(() => {
+                goTo(index + 1, true);
+            }, autoplayMs);
+        }
+
+        function restartAuto() {
+            startAuto();
+        }
+
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => {
+                goTo(index - 1, true);
+                restartAuto();
+            });
+        }
+
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => {
+                goTo(index + 1, true);
+                restartAuto();
+            });
+        }
+
+        slider.addEventListener('mouseenter', stopAuto);
+        slider.addEventListener('mouseleave', startAuto);
+        slider.addEventListener('touchstart', stopAuto, { passive: true });
+        slider.addEventListener('touchend', startAuto, { passive: true });
+        slider.addEventListener('focusin', stopAuto);
+        slider.addEventListener('focusout', startAuto);
+
+        window.addEventListener('resize', () => {
+            computeBounds();
+            startAuto();
+        });
+
+        window.addEventListener('orientationchange', () => {
+            computeBounds();
+            startAuto();
+        });
+
+        computeBounds();
+        startAuto();
+    });
     // ──────────────────────────────────────────────────────────────
 });

@@ -1,145 +1,198 @@
-/* 
-* webgl.js 
-* Handles Three.js 3D Background for Hero Section
+/*
+* webgl.js
+* BallCanvas-style interactive spheres for stats section.
 */
 
 document.addEventListener('DOMContentLoaded', () => {
-    const container = document.getElementById('webgl-container');
-    if (!container) return;
+    if (typeof THREE === 'undefined') return;
 
-    // Scene Setup
-    const scene = new THREE.Scene();
-    
-    // Abstract Medical/Educational BG - Let's use floating particles that look like cells/molecules
-    // Fog for depth
-    scene.fog = new THREE.FogExp2(0x0A2540, 0.001);
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // Camera Setup
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.z = 30;
+    function initStatsBallCanvas(containerId) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
 
-    // Renderer Setup
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
-    container.appendChild(renderer.domElement);
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x0b2d5b, 0.012);
 
-    // Lights
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-    scene.add(ambientLight);
+        const camera = new THREE.PerspectiveCamera(52, 1, 0.1, 300);
+        camera.position.z = 24;
 
-    const pointLight = new THREE.PointLight(0x0076D6, 2, 100);
-    pointLight.position.set(10, 10, 10);
-    scene.add(pointLight);
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setClearColor(0x000000, 0);
+        container.appendChild(renderer.domElement);
 
-    const pointLight2 = new THREE.PointLight(0xFFB800, 1, 100);
-    pointLight2.position.set(-10, -10, 10);
-    scene.add(pointLight2);
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.62);
+        scene.add(ambientLight);
 
-    // Group for objects
-    const particles = new THREE.Group();
-    scene.add(particles);
+        const keyLight = new THREE.PointLight(0x4ba3ff, 1.6, 180);
+        keyLight.position.set(10, 10, 16);
+        scene.add(keyLight);
 
-    // Simple geometry: Icosahedrons (looks a bit like stylized cells/molecules)
-    const geometry = new THREE.IcosahedronGeometry(1, 0);
-    
-    // Create multiple materials (Blue and Gold)
-    const materialBlue = new THREE.MeshPhysicalMaterial({ 
-        color: 0x0076D6, 
-        metalness: 0.1,
-        roughness: 0.5,
-        transmission: 0.9, // glass-like
-        thickness: 0.5
-    });
+        const warmLight = new THREE.PointLight(0xf9c74f, 1.15, 160);
+        warmLight.position.set(-11, -8, 12);
+        scene.add(warmLight);
 
-    const materialGold = new THREE.MeshStandardMaterial({ 
-        color: 0xFFB800, 
-        metalness: 0.8,
-        roughness: 0.2
-    });
+        const group = new THREE.Group();
+        scene.add(group);
 
-    // Generate random objects
-    for (let i = 0; i < 60; i++) {
-        const material = Math.random() > 0.8 ? materialGold : materialBlue;
-        const mesh = new THREE.Mesh(geometry, material);
-        
-        // Random position
-        mesh.position.x = (Math.random() - 0.5) * 60;
-        mesh.position.y = (Math.random() - 0.5) * 60;
-        mesh.position.z = (Math.random() - 0.5) * 40;
-        
-        // Random rotation
-        mesh.rotation.x = Math.random() * Math.PI;
-        mesh.rotation.y = Math.random() * Math.PI;
-        
-        // Random scale (size variation)
-        const scale = Math.random() * 1.5 + 0.5;
-        mesh.scale.set(scale, scale, scale);
-        
-        particles.add(mesh);
+        const isMobile = window.matchMedia('(max-width: 768px)').matches;
+        const count = isMobile ? 9 : 16;
+
+        const sphereGeometry = new THREE.SphereGeometry(0.72, 22, 22);
+        const materials = [
+            new THREE.MeshPhysicalMaterial({ color: 0x2f7fd8, roughness: 0.2, metalness: 0.35, clearcoat: 0.5, transparent: true, opacity: 0.78 }),
+            new THREE.MeshPhysicalMaterial({ color: 0x4aa8ff, roughness: 0.18, metalness: 0.28, clearcoat: 0.55, transparent: true, opacity: 0.76 }),
+            new THREE.MeshPhysicalMaterial({ color: 0xf0c231, roughness: 0.28, metalness: 0.45, clearcoat: 0.3, transparent: true, opacity: 0.72 })
+        ];
+
+        for (let i = 0; i < count; i += 1) {
+            const sphere = new THREE.Mesh(
+                sphereGeometry,
+                materials[Math.floor(Math.random() * materials.length)]
+            );
+
+            sphere.position.set(0, 0, 0);
+
+            const scale = Math.random() * (isMobile ? 0.45 : 0.55) + (isMobile ? 0.24 : 0.28);
+            sphere.scale.set(scale, scale, scale);
+            sphere.userData.floatSeed = Math.random() * Math.PI * 2;
+            sphere.userData.spinSeed = Math.random() * Math.PI * 2;
+            sphere.userData.normX = Math.random() * 2 - 1;
+            sphere.userData.normY = Math.random() * 2 - 1;
+            sphere.userData.depth = (Math.random() - 0.5) * 16;
+            sphere.userData.vx = 0;
+            sphere.userData.vy = 0;
+            sphere.userData.vz = 0;
+            group.add(sphere);
+        }
+
+        function getWorldBounds() {
+            const halfHeight = Math.tan(THREE.MathUtils.degToRad(camera.fov * 0.5)) * camera.position.z;
+            const halfWidth = halfHeight * camera.aspect;
+            return { halfWidth, halfHeight };
+        }
+
+        function mapSpheresToBounds() {
+            const bounds = getWorldBounds();
+            const marginX = isMobile ? 0.9 : 1.2;
+            const marginY = isMobile ? 0.45 : 0.6;
+            const spanX = Math.max(2, bounds.halfWidth - marginX);
+            const spanY = Math.max(1.2, bounds.halfHeight - marginY);
+
+            group.children.forEach((sphere) => {
+                sphere.userData.baseX = sphere.userData.normX * spanX;
+                sphere.userData.baseY = sphere.userData.normY * spanY;
+            });
+        }
+
+        function resize() {
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+            if (!width || !height) return;
+            renderer.setSize(width, height, false);
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+            mapSpheresToBounds();
+        }
+
+        resize();
+        window.addEventListener('resize', resize);
+        if (typeof ResizeObserver !== 'undefined') {
+            const ro = new ResizeObserver(resize);
+            ro.observe(container);
+        }
+
+        if (prefersReducedMotion) {
+            renderer.render(scene, camera);
+            return;
+        }
+
+        let tx = 0;
+        let ty = 0;
+        let cx = 0;
+        let cy = 0;
+        let intensity = 1;
+
+        function setPointer(clientX, clientY, boost) {
+            const rect = container.getBoundingClientRect();
+            if (!rect.width || !rect.height) return;
+            const nx = ((clientX - rect.left) / rect.width) * 2 - 1;
+            const ny = ((clientY - rect.top) / rect.height) * 2 - 1;
+            tx = Math.max(-1, Math.min(1, nx));
+            ty = Math.max(-1, Math.min(1, ny));
+            intensity = Math.max(intensity, boost);
+        }
+
+        container.addEventListener('mousemove', (e) => setPointer(e.clientX, e.clientY, 1.35));
+        container.addEventListener('mouseleave', () => { tx = 0; ty = 0; });
+        container.addEventListener('touchstart', (e) => {
+            const t = e.changedTouches && e.changedTouches[0];
+            if (t) setPointer(t.clientX, t.clientY, 1.75);
+        }, { passive: true });
+        container.addEventListener('touchmove', (e) => {
+            const t = e.changedTouches && e.changedTouches[0];
+            if (t) setPointer(t.clientX, t.clientY, 1.95);
+        }, { passive: true });
+        container.addEventListener('touchend', () => { tx *= 0.2; ty *= 0.2; }, { passive: true });
+
+        const clock = new THREE.Clock();
+        let lastTime = 0;
+        function animate() {
+            requestAnimationFrame(animate);
+            const t = clock.getElapsedTime();
+            lastTime = t;
+
+            cx += (tx - cx) * 0.065;
+            cy += (ty - cy) * 0.065;
+            intensity += (1 - intensity) * 0.04;
+
+            const bounds = getWorldBounds();
+            const pointerWorldX = cx * (bounds.halfWidth * 0.62);
+            const pointerWorldY = -cy * (bounds.halfHeight * 0.58);
+
+            group.children.forEach((node, idx) => {
+                if (!node.isMesh) return;
+
+                const driftX = Math.sin(t * 0.45 + node.userData.floatSeed + idx * 0.03) * 0.34;
+                const driftY = Math.cos(t * 0.52 + node.userData.floatSeed + idx * 0.04) * 0.26;
+                const driftZ = Math.sin(t * 0.62 + node.userData.spinSeed + idx * 0.05) * 0.38;
+
+                const targetX = node.userData.baseX + driftX;
+                const targetY = node.userData.baseY + driftY;
+                const targetZ = node.userData.depth + driftZ;
+
+                let ax = (targetX - node.position.x) * 0.03;
+                let ay = (targetY - node.position.y) * 0.03;
+                let az = (targetZ - node.position.z) * 0.03;
+
+                const dx = node.position.x - pointerWorldX;
+                const dy = node.position.y - pointerWorldY;
+                const distSq = dx * dx + dy * dy;
+                if (distSq < 7.8) {
+                    const repel = (7.8 - distSq) * 0.0012 * intensity;
+                    ax += dx * repel;
+                    ay += dy * repel;
+                }
+
+                node.userData.vx = (node.userData.vx + ax) * 0.86;
+                node.userData.vy = (node.userData.vy + ay) * 0.86;
+                node.userData.vz = (node.userData.vz + az) * 0.86;
+
+                node.position.x += node.userData.vx;
+                node.position.y += node.userData.vy;
+                node.position.z += node.userData.vz;
+
+                node.rotation.x += 0.0032 * intensity;
+                node.rotation.y += 0.0048 * intensity;
+            });
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
     }
 
-    // Animation Loop
-    const clock = new THREE.Clock();
-
-    function animate() {
-        requestAnimationFrame(animate);
-
-        const elapsedTime = clock.getElapsedTime();
-
-        // Very slow, ambient rotation of the entire particle group
-        particles.rotation.y = elapsedTime * 0.05;
-        particles.rotation.z = Math.sin(elapsedTime * 0.02) * 0.1;
-
-        // Animate individual meshes
-        particles.children.forEach((mesh, index) => {
-            mesh.rotation.x += 0.005;
-            mesh.rotation.y += 0.01;
-            
-            // Subtle floating effect
-            mesh.position.y += Math.sin(elapsedTime * 0.5 + index) * 0.02;
-        });
-
-        renderer.render(scene, camera);
-    }
-
-    animate();
-
-    // Mouse Interaction (Parallax Effect)
-    let mouseX = 0;
-    let mouseY = 0;
-    let targetX = 0;
-    let targetY = 0;
-
-    const windowHalfX = window.innerWidth / 2;
-    const windowHalfY = window.innerHeight / 2;
-
-    document.addEventListener('mousemove', (event) => {
-        mouseX = (event.clientX - windowHalfX) * 0.01;
-        mouseY = (event.clientY - windowHalfY) * 0.01;
-    });
-
-    // Apply parallax inside the animate loop (modified locally in requestAnimationFrame)
-    function parallaxAnimate() {
-        requestAnimationFrame(parallaxAnimate);
-        
-        targetX = mouseX * 0.5;
-        targetY = mouseY * 0.5;
-        
-        particles.rotation.x += 0.05 * (targetY - particles.rotation.x);
-        particles.rotation.y += 0.05 * (targetX - particles.rotation.y);
-    }
-    
-    // Keep it simple and combine
-    gsap.ticker.add(() => {
-       // We can use GSAP Ticker for smoother integration if we wanted, 
-       // but requestAnimationFrame is fine for Three.js.
-    });
-
-    // Make Scene Responsive
-    window.addEventListener('resize', () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-    });
+    initStatsBallCanvas('statsWebglBg');
 });

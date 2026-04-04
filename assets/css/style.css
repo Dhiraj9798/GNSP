@@ -130,6 +130,37 @@ body.no-scroll {
     padding: 0 20px;
 }
 
+/* Simple breadcrumb banner for inner pages */
+.page-hero-simple {
+    background: #f1f1f1;
+    border-top: 1px solid #e1e1e1;
+    border-bottom: 1px solid #e1e1e1;
+    padding: 10px 0;
+}
+
+.page-breadcrumb {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 0.95rem;
+    color: #333;
+}
+
+.page-breadcrumb a {
+    color: #c62828;
+    text-decoration: underline;
+}
+
+.page-breadcrumb .sep {
+    color: #666;
+}
+
+.page-breadcrumb .crumb-parent,
+.page-breadcrumb .crumb-current {
+    color: #222;
+}
+
 /* --- Header CSS Custom Premium --- */
 .main-header {
     background-color: var(--bg-white);
@@ -506,6 +537,7 @@ body.no-scroll {
 @media (min-width: 992px) {
     .nav-container {
         justify-content: flex-end;
+        padding-right: 14px;
     }
 
     .main-nav {
@@ -515,6 +547,7 @@ body.no-scroll {
     .nav-menu {
         margin-left: auto;
         padding-left: 62px; /* Keep space for sticky logo and push menu to the right */
+        padding-right: 16px;
         gap: 4px;
     }
 
@@ -530,7 +563,7 @@ body.no-scroll {
     }
 
     .navbar-wrapper.sticky .nav-menu {
-        transform: translateX(18px);
+        transform: translateX(6px);
     }
 }
 
@@ -1089,6 +1122,11 @@ body.no-scroll {
 }
 
 @media (max-width: 768px) {
+    .hero-section {
+        height: 85vh;
+        min-height: 560px;
+    }
+
     .coming-soon-page {
         padding: 96px 0 50px;
     }
