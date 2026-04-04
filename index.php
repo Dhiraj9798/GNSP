@@ -528,4 +528,25 @@
     </div>
 </section>
 
+<!-- Floating Side Contact Menu (Index Only) -->
+<aside class="index-float-menu" id="indexFloatMenu" aria-label="Quick contact actions">
+    <a class="index-float-link is-whatsapp" href="https://wa.me/919999999999" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M12.04 2a10 10 0 0 0-8.65 15.03L2 22l5.12-1.34A10 10 0 1 0 12.04 2Zm0 18.18a8.13 8.13 0 0 1-4.13-1.13l-.3-.18-3.04.8.81-2.96-.2-.31a8.15 8.15 0 1 1 6.86 3.78Zm4.46-6.03c-.24-.12-1.45-.72-1.67-.8-.22-.08-.38-.12-.54.12-.16.24-.62.8-.76.97-.14.16-.28.18-.52.06-.24-.12-1-.37-1.9-1.17-.7-.62-1.17-1.39-1.3-1.63-.14-.24-.01-.37.1-.49.1-.1.24-.26.36-.39.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.3-.74-1.78-.2-.48-.4-.4-.54-.41h-.46c-.16 0-.42.06-.64.3-.22.24-.84.82-.84 1.99s.86 2.3.98 2.46c.12.16 1.7 2.59 4.12 3.63 2.42 1.03 2.42.69 2.86.65.44-.04 1.45-.59 1.66-1.16.2-.56.2-1.04.14-1.14-.06-.1-.22-.16-.46-.28Z" />
+        </svg>
+    </a>
+    <a class="index-float-link is-call" href="tel:+919999999999" aria-label="Call now">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24c1.12.37 2.32.57 3.57.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.4 21 3 13.6 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.24 1.02l-2.2 2.2Z" />
+        </svg>
+    </a>
+    <a class="index-float-link is-instagram" href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Open Instagram">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7Zm5 3.5a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Zm0 2a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Zm5-2.75a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5Z" />
+        </svg>
+    </a>
+</aside>
+
+<?php require_once 'includes/ai-chat-widget.php'; ?>
+
 <?php require_once 'includes/footer.php'; ?>

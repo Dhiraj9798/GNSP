@@ -76,6 +76,7 @@ $currentPageTitle = $pageTitleMap[$currentPage] ?? ucwords(str_replace(['-', '_'
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GNPS | Gurudeo Nursing and Paramedical Science</title>
+    <link rel="icon" type="image/png" href="assets/images/logo.png">
     <!-- Fonts -->
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
@@ -84,6 +85,9 @@ $currentPageTitle = $pageTitleMap[$currentPage] ?? ucwords(str_replace(['-', '_'
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/components.css">
     <link rel="stylesheet" href="assets/css/animations.css">
+    <?php if ($isHome): ?>
+    <link rel="stylesheet" href="assets/css/chatbot.css">
+    <?php endif; ?>
 </head>
 
 <body>

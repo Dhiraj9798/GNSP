@@ -61,6 +61,9 @@
 
 <!-- Custom Scripts -->
 <script src="assets/js/main.js"></script>
+<?php if (basename($_SERVER['PHP_SELF']) === 'index.php'): ?>
+<script src="assets/js/chatbot.js"></script>
+<?php endif; ?>
 <script src="assets/js/webgl.js"></script>
 <script src="assets/js/animations.js"></script>
 

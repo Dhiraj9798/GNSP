@@ -516,5 +516,53 @@ document.addEventListener("DOMContentLoaded", () => {
         computeBounds();
         startAuto();
     });
+
+    // ─── Index Floating Side Menu Visibility ─────────────────────
+    const floatMenu = document.getElementById('indexFloatMenu');
+    const heroSection = document.getElementById('hero');
+    const footer = document.querySelector('.footer');
+
+    if (floatMenu && heroSection && footer) {
+        function updateFloatMenuVisibility() {
+            const heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
+            const footerTop = footer.offsetTop;
+            const scrollY = window.scrollY || window.pageYOffset;
+            const viewportHeight = window.innerHeight;
+
+            const hasPassedHero = scrollY > (heroBottom - 90);
+            const beforeFooter = (scrollY + viewportHeight) < (footerTop - 50);
+            const shouldShow = hasPassedHero && beforeFooter;
+
+            if (floatMenu) floatMenu.classList.toggle('is-visible', shouldShow);
+        }
+
+        window.addEventListener('scroll', updateFloatMenuVisibility, { passive: true });
+        window.addEventListener('resize', updateFloatMenuVisibility);
+        window.addEventListener('orientationchange', updateFloatMenuVisibility);
+        window.addEventListener('pageshow', updateFloatMenuVisibility);
+
+        updateFloatMenuVisibility();
+    }
+
+    // ─── About Cards Touch Feedback ──────────────────────────────
+    const aboutFocusCards = document.querySelectorAll('.about-focus-card');
+    aboutFocusCards.forEach((card) => {
+        let touchTimer = null;
+
+        card.addEventListener('touchstart', () => {
+            card.classList.add('is-touched');
+        }, { passive: true });
+
+        card.addEventListener('touchend', () => {
+            clearTimeout(touchTimer);
+            touchTimer = setTimeout(() => {
+                card.classList.remove('is-touched');
+            }, 220);
+        }, { passive: true });
+
+        card.addEventListener('touchcancel', () => {
+            card.classList.remove('is-touched');
+        }, { passive: true });
+    });
     // ──────────────────────────────────────────────────────────────
 });
