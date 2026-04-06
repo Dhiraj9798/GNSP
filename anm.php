@@ -45,23 +45,10 @@
 					<h3 class="program-subtitle">Course Duration</h3>
 					<p>2 Years</p>
 
-					<h3 class="program-subtitle">Course Highlights</h3>
-					<ul class="program-doc-list">
-						<li>Practical training in nursing labs and supervised hospital units</li>
-						<li>Clinical exposure and internship-oriented skill sessions</li>
-						<li>Certification awarded after successful completion of program requirements</li>
-					</ul>
-
-					<h3 class="program-subtitle">Career Opportunities</h3>
-					<ul class="program-doc-list">
-						<li>Nurse, Midwife, Community Health Worker</li>
-						<li>Hospitals, Clinics, and Nursing Homes</li>
-						<li>NGOs and Community Health Programs</li>
-					</ul>
+					
 
 					
 
-					<p class="program-key-line">A practical and career-oriented pathway for entry-level nursing professionals.</p>
 				</article>
 			</main>
 

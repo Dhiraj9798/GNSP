@@ -25,7 +25,7 @@
                     <path d="M16.5 6.5v10a4.5 4.5 0 1 1-9 0v-11a3 3 0 1 1 6 0v9.5a1.5 1.5 0 1 1-3 0V7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
             </button>
-            <input id="gnpsChatInput" type="text" placeholder="Ask about courses, admission..." autocomplete="off" required>
+            <input id="gnpsChatInput" type="text" placeholder="Choose menu or type question..." autocomplete="off" required>
             <button type="submit" class="gnps-chat-send" aria-label="Send message">
                 <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                     <path d="M3 11.5 20.5 3l-4.8 18-3.6-6.4L3 11.5Z" fill="currentColor" />

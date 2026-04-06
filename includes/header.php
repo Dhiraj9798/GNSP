@@ -4,13 +4,17 @@ $isHome = $currentPage === 'index.php';
 $isAbout = in_array($currentPage, ['about.php', 'director.php', 'our-story.php'], true);
 $isCourses = in_array($currentPage, ['anm.php', 'gnm.php', 'bsc_nursing.php'], true);
 $isAcademic = in_array($currentPage, ['academic.php', 'faculty.php', 'result.php'], true);
-$isAdmission = in_array($currentPage, ['admission.php', 'admission-form.php', 'apply-online.php'], true);
+$isAdmission = in_array($currentPage, ['admission.php', 'admission-procedure.php', 'admission-form.php', 'enquiry-form.php', 'apply-online.php', 'eligibility.php'], true);
 $isAffiliation = in_array($currentPage, ['affiliation.php', 'bnrc-affiliation.php', 'inc-affiliation.php'], true);
 $isGallery = in_array($currentPage, ['gallery.php', 'photo-gallery.php', 'video-gallery.php'], true);
 $isTraining = in_array($currentPage, ['training.php', 'hospital-training.php', 'clinical-training.php'], true);
 $isPlacement = in_array($currentPage, ['placement.php', 'placement-cell.php', 'our-recruiters.php'], true);
 $isFacilities = in_array($currentPage, ['facilities.php', 'campus-facilities.php'], true);
 $isContact = $currentPage === 'contact.php';
+$isLogin = $currentPage === 'login.php';
+$isRegister = $currentPage === 'registration.php';
+$isAuth = $isLogin || $isRegister;
+$isStudentDashboard = $currentPage === 'student-dashboard.php';
 
 $pageTitleMap = [
     'about.php' => 'About Us',
@@ -23,8 +27,11 @@ $pageTitleMap = [
     'faculty.php' => 'Faculty List',
     'result.php' => 'Result',
     'admission.php' => 'Admission',
+    'admission-procedure.php' => 'Admission Procedure',
     'admission-form.php' => 'Admission Form',
+    'enquiry-form.php' => 'Enquiry Form',
     'apply-online.php' => 'Apply Online',
+    'eligibility.php' => 'Eligibility',
     'affiliation.php' => 'Affiliation',
     'bnrc-affiliation.php' => 'BNRC Affiliation',
     'inc-affiliation.php' => 'INC Affiliation',
@@ -44,6 +51,7 @@ $pageTitleMap = [
     'scholarship.php' => 'Scholarship',
     'registration.php' => 'Registration',
     'login.php' => 'Student Login',
+    'student-dashboard.php' => 'Student Dashboard',
 ];
 
 $pageParent = '';
@@ -85,6 +93,13 @@ $currentPageTitle = $pageTitleMap[$currentPage] ?? ucwords(str_replace(['-', '_'
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/components.css">
     <link rel="stylesheet" href="assets/css/animations.css">
+    <?php if ($isStudentDashboard): ?>
+    <link rel="stylesheet" href="assets/css/student-dashboard.css">
+    <?php endif; ?>
+    <?php if ($isAuth): ?>
+    <link rel="stylesheet" href="assets/css/student-auth.css">
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
+    <?php endif; ?>
     <?php if ($isHome): ?>
     <link rel="stylesheet" href="assets/css/chatbot.css">
     <?php endif; ?>
@@ -136,7 +151,9 @@ $currentPageTitle = $pageTitleMap[$currentPage] ?? ucwords(str_replace(['-', '_'
                     
                     <!-- 3D Sliding Logo (Visible only when sticky) -->
                     <div class="sticky-logo-wrapper">
-                        <img src="assets/images/logo.png" alt="GNPS Small Logo">
+                        <a href="index.php" class="sticky-logo-link" aria-label="Go to home page">
+                            <img src="assets/images/logo.png" alt="GNPS Small Logo">
+                        </a>
                     </div>
 
                     <!-- Mobile Button -->
@@ -176,8 +193,12 @@ $currentPageTitle = $pageTitleMap[$currentPage] ?? ucwords(str_replace(['-', '_'
                         <li class="dropdown<?php echo $isAdmission ? ' active' : ''; ?>">
                             <a href="#" aria-haspopup="true" aria-expanded="<?php echo $isAdmission ? 'true' : 'false'; ?>">ADMISSION <span class="caret">&#9662;</span></a>
                             <ul class="dropdown-menu">
+                                <li><a class="<?php echo $currentPage === 'admission.php' ? 'is-active' : ''; ?>" href="admission.php">Admission</a></li>
+                                <li><a class="<?php echo $currentPage === 'admission-procedure.php' ? 'is-active' : ''; ?>" href="admission-procedure.php">Admission Procedure</a></li>
                                 <li><a class="<?php echo $currentPage === 'admission-form.php' ? 'is-active' : ''; ?>" href="admission-form.php">Admission Form</a></li>
+                                <li><a class="<?php echo $currentPage === 'enquiry-form.php' ? 'is-active' : ''; ?>" href="enquiry-form.php">Enquiry Form</a></li>
                                 <li><a class="<?php echo $currentPage === 'apply-online.php' ? 'is-active' : ''; ?>" href="apply-online.php">Apply Online</a></li>
+                                <li><a class="<?php echo $currentPage === 'eligibility.php' ? 'is-active' : ''; ?>" href="eligibility.php">Eligibility</a></li>
                             </ul>
                         </li>
                         <li class="dropdown<?php echo $isAffiliation ? ' active' : ''; ?>">

@@ -564,5 +564,44 @@ document.addEventListener("DOMContentLoaded", () => {
             card.classList.remove('is-touched');
         }, { passive: true });
     });
+
+    // ─── Faculty Cards Scroll + Touch Feedback ─────────────────
+    const facultyMemberCards = document.querySelectorAll('.faculty-member-card');
+    if (facultyMemberCards.length) {
+        const facultyObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add('is-visible');
+                observer.unobserve(entry.target);
+            });
+        }, {
+            threshold: 0.18,
+            rootMargin: '0px 0px -26px 0px'
+        });
+
+        facultyMemberCards.forEach((card, index) => {
+            card.style.setProperty('--card-delay', `${index * 40}ms`);
+            facultyObserver.observe(card);
+        });
+
+        facultyMemberCards.forEach((card) => {
+            let touchTimer = null;
+
+            card.addEventListener('touchstart', () => {
+                card.classList.add('is-touched');
+            }, { passive: true });
+
+            card.addEventListener('touchend', () => {
+                clearTimeout(touchTimer);
+                touchTimer = setTimeout(() => {
+                    card.classList.remove('is-touched');
+                }, 220);
+            }, { passive: true });
+
+            card.addEventListener('touchcancel', () => {
+                card.classList.remove('is-touched');
+            }, { passive: true });
+        });
+    }
     // ──────────────────────────────────────────────────────────────
 });

@@ -64,6 +64,9 @@
 <?php if (basename($_SERVER['PHP_SELF']) === 'index.php'): ?>
 <script src="assets/js/chatbot.js"></script>
 <?php endif; ?>
+<?php if (in_array(basename($_SERVER['PHP_SELF']), ['login.php', 'registration.php'], true)): ?>
+<script src="assets/js/student-auth.js"></script>
+<?php endif; ?>
 <script src="assets/js/webgl.js"></script>
 <script src="assets/js/animations.js"></script>
 

@@ -45,31 +45,7 @@
 						The program combines classroom education, practical training, and clinical exposure.
 					</p>
 
-					<h3 class="program-subtitle">Practical Training and Internship</h3>
-					<p>
-						Practical sessions are conducted in nursing labs and hospitals. The internship phase allows students to work
-						under supervision in real clinical environments for hands-on confidence and professional readiness.
-					</p>
-					<ul class="program-doc-list">
-						<li>General Medicine and Surgery</li>
-						<li>Pediatrics</li>
-						<li>Obstetrics & Gynecology</li>
-						<li>Psychiatry</li>
-						<li>Community Health</li>
-					</ul>
-
-					<h3 class="program-subtitle">Career Opportunities After B.Sc. Nursing</h3>
-					<ul class="program-doc-list">
-						<li>Government and Private Hospitals</li>
-						<li>Clinics and Nursing Homes</li>
-						<li>Community Health Centers</li>
-						<li>NGOs and Rehabilitation Centers</li>
-						<li>Indian Army, Navy, and Air Force</li>
-						<li>Educational Institutions</li>
-					</ul>
-
-					<p class="program-key-line">Industry-relevant nursing education pathway with strong clinical depth and diverse career scope.</p>
-				</article>
+					
 			</main>
 
 			<aside class="program-sidebar">

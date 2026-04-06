@@ -45,31 +45,7 @@
 					<h3 class="program-subtitle">Course Duration</h3>
 					<p>3 Years</p>
 
-					<h3 class="program-subtitle">Skills Developed</h3>
-					<ul class="program-doc-list">
-						<li>Patient Care Management</li>
-						<li>Communication and Interpersonal Skills</li>
-						<li>First Aid and Emergency Handling</li>
-						<li>Maternal and Child Healthcare</li>
-						<li>Teamwork and Leadership in Nursing Practice</li>
-					</ul>
-
-					<h3 class="program-subtitle">Career Opportunities</h3>
-					<p>Healthcare Facilities:</p>
-					<ul class="program-doc-list">
-						<li>Hospitals (Private & Government)</li>
-						<li>Clinics and Nursing Homes</li>
-						<li>Community Health Centers</li>
-					</ul>
-
-					<h3 class="program-subtitle">Conclusion</h3>
-					<p>
-						The GNM course equips students with theoretical and practical knowledge required for
-						professional nursing practice, offering diverse job opportunities and a solid foundation
-						for advanced studies in the healthcare sector.
-					</p>
-
-					<p class="program-key-line">A balanced nursing program with strong skills, internship exposure, and long-term growth potential.</p>
+					
 				</article>
 			</main>
 
