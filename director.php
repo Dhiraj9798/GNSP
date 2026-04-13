@@ -10,7 +10,7 @@
 
 		<article class="director-clean-layout">
 			<figure class="director-clean-media" aria-label="Director portrait">
-				<img src="assets/images/chairperson.jpeg" alt="Director, Gurudeo Nursing and Paramedical Science">
+				<img src="assets/images/director.jpeg" alt="Director, Gurudeo Nursing and Paramedical Science">
 			</figure>
 
 			<div class="director-clean-content">
