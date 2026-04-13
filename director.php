@@ -53,6 +53,30 @@
 				</div>
 			</div>
 		</article>
+
+		<!-- Motivational Cards Section -->
+		<div class="motivational-cards-grid">
+			<div class="motivational-card gsap-scroll-up">
+				<div class="motivational-card-icon">💪</div>
+				<h4>Dedication</h4>
+				<p>Commit yourself to excellence in every task you undertake in nursing practice.</p>
+			</div>
+			<div class="motivational-card gsap-scroll-up" style="animation-delay: 0.2s;">
+				<div class="motivational-card-icon">❤️</div>
+				<h4>Compassion</h4>
+				<p>Serve patients with empathy, kindness, and genuine care in all circumstances.</p>
+			</div>
+			<div class="motivational-card gsap-scroll-up" style="animation-delay: 0.4s;">
+				<div class="motivational-card-icon">🎓</div>
+				<h4>Growth</h4>
+				<p>Continuously learn, adapt, and improve your skills for better patient outcomes.</p>
+			</div>
+			<div class="motivational-card gsap-scroll-up" style="animation-delay: 0.6s;">
+				<div class="motivational-card-icon">🌟</div>
+				<h4>Excellence</h4>
+				<p>Strive for professional excellence and maintain the highest standards of care.</p>
+			</div>
+		</div>
 	</div>
 </section>
 
