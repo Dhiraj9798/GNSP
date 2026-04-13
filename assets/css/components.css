@@ -1534,6 +1534,7 @@
 }
 
 .director-clean-media {
+    display: none;
     margin: 0;
     width: 100%;
     min-height: 460px;
@@ -1542,7 +1543,6 @@
     border-radius: 10px;
     background: #f8fbff;
     box-shadow: 0 10px 20px rgba(25, 58, 92, 0.1);
-    display: flex;
     align-items: center;
     justify-content: center;
 }
