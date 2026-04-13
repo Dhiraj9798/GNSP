@@ -54,17 +54,8 @@
         <aside class="welcome-leadership" aria-label="Leadership">
             <article class="leader-card">
                 <div class="leader-avatar">
-                    <img src="assets/images/Chairperson.jpeg" alt="Chairperson">
+                    <img src="assets/images/hero2.jpeg" alt="Leadership">
                 </div>
-                <h3>Shri Gurudeo Narayan</h3>
-                <p>Chairperson, GNPS</p>
-            </article>
-            <article class="leader-card">
-                <div class="leader-avatar">
-                    <img src="assets/images/Director.jpeg" alt="Academic Director">
-                </div>
-                <h3>Dr. R. Sharma</h3>
-                <p>Academic Director, GNPS</p>
             </article>
         </aside>
     </div>
