@@ -13,7 +13,8 @@ $isFacilities = in_array($currentPage, ['facilities.php', 'campus-facilities.php
 $isContact = $currentPage === 'contact.php';
 $isLogin = $currentPage === 'login.php';
 $isRegister = $currentPage === 'registration.php';
-$isAuth = $isLogin || $isRegister;
+$isApplyOnline = $currentPage === 'apply-online.php';
+$isAuth = $isLogin || $isRegister || $isApplyOnline;
 $isStudentDashboard = $currentPage === 'student-dashboard.php';
 
 $pageTitleMap = [
@@ -193,7 +194,6 @@ $currentPageTitle = $pageTitleMap[$currentPage] ?? ucwords(str_replace(['-', '_'
                         <li class="dropdown<?php echo $isAdmission ? ' active' : ''; ?>">
                             <a href="#" aria-haspopup="true" aria-expanded="<?php echo $isAdmission ? 'true' : 'false'; ?>">ADMISSION <span class="caret">&#9662;</span></a>
                             <ul class="dropdown-menu">
-                                <li><a class="<?php echo $currentPage === 'admission.php' ? 'is-active' : ''; ?>" href="admission.php">Admission</a></li>
                                 <li><a class="<?php echo $currentPage === 'admission-procedure.php' ? 'is-active' : ''; ?>" href="admission-procedure.php">Admission Procedure</a></li>
                                 <li><a class="<?php echo $currentPage === 'admission-form.php' ? 'is-active' : ''; ?>" href="admission-form.php">Admission Form</a></li>
                                 <li><a class="<?php echo $currentPage === 'enquiry-form.php' ? 'is-active' : ''; ?>" href="enquiry-form.php">Enquiry Form</a></li>
